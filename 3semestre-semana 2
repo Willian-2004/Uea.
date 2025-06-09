@@ -1,0 +1,131 @@
+using System;Add commentMore actions
+
+namespace FigurasGeometricas
+{
+    /// <summary>
+    /// La clase Circulo encapsula los datos primitivos de un círculo (radio)
+    /// y proporciona métodos para calcular su área y perímetro.
+    /// </summary>
+    public class Circulo
+    {
+        // El campo 'radio' almacena el valor primitivo del radio del círculo.
+        private double radio;
+
+        /// <summary>
+        /// Constructor de la clase Circulo.
+        /// Inicializa una nueva instancia de la clase Circulo con el radio especificado.
+        /// </summary>
+        /// <param name="radio">El radio del círculo. Debe ser un valor positivo.</param>
+        public Circulo(double radio)
+        {
+            // Validamos que el radio sea positivo para asegurar la validez del objeto.
+            if (radio <= 0)
+            {
+                throw new ArgumentException("El radio debe ser un valor positivo.");
+            }
+            this.radio = radio;
+        }
+
+        /// <summary>
+        /// Obtiene el valor del radio del círculo.
+        /// Esta propiedad de solo lectura permite acceder al radio encapsulado.
+        /// </summary>
+        public double Radio
+        {
+            get { return radio; }
+        }
+
+        /// <summary>
+        /// CalcularArea es una función que devuelve un valor double.
+        /// Se utiliza para calcular el área de un círculo.
+        /// </summary>
+        /// <returns>El área del círculo.</returns>
+        public double CalcularArea()
+        {
+            // La fórmula para el área de un círculo es π * radio^2.
+            return Math.PI * radio * radio;
+        }
+
+        /// <summary>
+        /// CalcularPerimetro es una función que devuelve un valor double.
+        /// Se utiliza para calcular el perímetro (circunferencia) de un círculo.
+        /// </summary>
+        /// <returns>El perímetro del círculo.</returns>
+        public double CalcularPerimetro()
+        {
+            // La fórmula para el perímetro de un círculo es 2 * π * radio.
+            return 2 * Math.PI * radio;
+        }
+    }
+}
+namespace FigurasGeometricasAdd commentMore actions
+{
+    /// <summary>
+    /// La clase Rectangulo encapsula los datos primitivos de un rectángulo (base y altura)
+    /// y proporciona métodos para calcular su área y perímetro.
+    /// </summary>
+    public class Rectangulo
+    {
+        // El campo 'baseRectangulo' almacena el valor primitivo de la base del rectángulo.
+        private double baseRectangulo;
+        // El campo 'altura' almacena el valor primitivo de la altura del rectángulo.
+        private double altura;
+
+        /// <summary>
+        /// Constructor de la clase Rectangulo.
+        /// Inicializa una nueva instancia de la clase Rectangulo con la base y altura especificadas.
+        /// </summary>
+        /// <param name="baseRectangulo">La longitud de la base del rectángulo. Debe ser un valor positivo.</param>
+        /// <param name="altura">La longitud de la altura del rectángulo. Debe ser un valor positivo.</param>
+        public Rectangulo(double baseRectangulo, double altura)
+        {
+            // Validamos que la base y la altura sean positivas para asegurar la validez del objeto.
+            if (baseRectangulo <= 0 || altura <= 0)
+            {
+                throw new ArgumentException("La base y la altura deben ser valores positivos.");
+            }
+            this.baseRectangulo = baseRectangulo;
+            this.altura = altura;
+        }
+
+        /// <summary>
+        /// Obtiene el valor de la base del rectángulo.
+        /// Esta propiedad de solo lectura permite acceder a la base encapsulada.
+        /// </summary>
+        public double Base
+        {
+            get { return baseRectangulo; }
+        }
+
+        /// <summary>
+        /// Obtiene el valor de la altura del rectángulo.
+        /// Esta propiedad de solo lectura permite acceder a la altura encapsulada.
+        /// </summary>
+        public double Altura
+        {
+            get { return altura; }
+        }
+
+        /// <summary>
+        /// CalcularArea es una función que devuelve un valor double.
+        /// Se utiliza para calcular el área de un rectángulo.
+        /// </summary>
+        /// <returns>El área del rectángulo.</returns>
+        public double CalcularArea()
+        {
+            // La fórmula para el área de un rectángulo es base * altura.
+            return baseRectangulo * altura;
+        }
+
+        /// <summary>
+        /// CalcularPerimetro es una función que devuelve un valor double.
+        /// Se utiliza para calcular el perímetro de un rectángulo.
+        /// </summary>
+        /// <returns>El perímetro del rectángulo.</returns>
+        public double CalcularPerimetro()
+        {
+            // La fórmula para el perímetro de un rectángulo es 2 * (base + altura).
+            return 2 * (baseRectangulo + altura);
+        }Add commentMore actions
+    }
+}
