@@ -1,0 +1,93 @@
+using System; // Necesario para Console.WriteLine y otras utilidades
+using System.Linq; // Necesario para el método string.Join
+
+namespace RegistroEstudiantes
+{
+    // Definición de la clase Estudiante
+    public class Estudiante
+    {
+        // Propiedades de la clase (atributos del estudiante)
+        public int Id { get; set; } // Identificador único del estudiante
+        public string Nombres { get; set; } // Nombres del estudiante
+        public string Apellidos { get; set; } // Apellidos del estudiante
+        public string Direccion { get; set; } // Dirección de residencia del estudiante
+
+        // Array para almacenar hasta 3 números de teléfono
+        // Se inicializa con un tamaño fijo de 3.
+        public string[] Telefonos { get; set; }
+
+        // Constructor de la clase Estudiante
+        // Permite crear una nueva instancia de Estudiante con valores iniciales.
+        public Estudiante(int id, string nombres, string apellidos, string direccion)
+        {
+            Id = id;
+            Nombres = nombres;
+            Apellidos = apellidos;
+            Direccion = direccion;
+            Telefonos = new string[3]; // Inicializa el array de teléfonos con 3 espacios vacíos
+        }
+
+        // Método para agregar un número de teléfono al array
+        // Permite asignar un teléfono a una posición específica del array (0, 1 o 2).
+        public void AgregarTelefono(int indice, string numeroTelefono)
+        {
+            // Verifica que el índice sea válido (entre 0 y 2)
+            if (indice >= 0 && indice < Telefonos.Length)
+            {
+                Telefonos[indice] = numeroTelefono;
+                Console.WriteLine($"Teléfono '{numeroTelefono}' agregado en la posición {indice} para {Nombres} {Apellidos}.");
+            }
+            else
+            {
+                Console.WriteLine("Error: Índice de teléfono inválido. Debe ser 0, 1 o 2.");
+            }
+        }
+
+        // Método para mostrar la información completa del estudiante
+        public void MostrarInformacion()
+        {
+            Console.WriteLine("--- Información del Estudiante ---");
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Nombres: {Nombres}");
+            Console.WriteLine($"Apellidos: {Apellidos}");
+            Console.WriteLine($"Dirección: {Direccion}");
+            // Muestra los teléfonos separados por coma, excluyendo los nulos si los hay.
+            // Utiliza Linq para filtrar los nulos y string.Join para unirlos.
+            Console.WriteLine($"Teléfonos: {string.Join(", ", Telefonos.Where(t => !string.IsNullOrEmpty(t)))}");
+            Console.WriteLine("---------------------------------");
+        }
+    }
+
+    // Clase principal para ejecutar el programa
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Iniciando registro de estudiantes...");
+
+            // Crear una instancia de la clase Estudiante
+            Estudiante estudiante1 = new Estudiante(101, "Ana", "García Pérez", "Calle Falsa 123, Quito");
+
+            // Agregar teléfonos al estudiante1 usando el array
+            estudiante1.AgregarTelefono(0, "0991234567");
+            estudiante1.AgregarTelefono(1, "022987654");
+            // Intentar agregar un tercer teléfono (opcional)
+            estudiante1.AgregarTelefono(2, "0987654321");
+            // Intentar agregar un teléfono en un índice inválido
+            estudiante1.AgregarTelefono(3, "0900000000"); // Esto generará un mensaje de error
+
+            Console.WriteLine("\nMostrando información del estudiante 1:");
+            estudiante1.MostrarInformacion();
+
+            // Puedes crear más estudiantes y gestionarlos en un array de estudiantes si fuera necesario
+            // Ejemplo de un array de objetos Estudiante
+            // Estudiante[] listaEstudiantes = new Estudiante[2];
+            // listaEstudiantes[0] = estudiante1;
+            // listaEstudiante[1] = new Estudiante(102, "Luis", "Martínez Soto", "Av. Siempre Viva 456, Guayaquil");
+            // listaEstudiante[1].AgregarTelefono(0, "0971112223");
+            // listaEstudiantes[1].MostrarInformacion();
+
+            Console.WriteLine("\nPrograma finalizado.");
+        }
+    }
+}
