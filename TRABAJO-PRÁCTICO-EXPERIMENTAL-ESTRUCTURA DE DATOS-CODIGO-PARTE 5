@@ -1,0 +1,28 @@
+using System;
+
+namespace TurnosClinica.Models
+{
+    public class Turno
+    {
+        public int Id { get; set; }
+        public Paciente Paciente { get; set; }
+        public Medico Medico { get; set; }
+        public DateTime FechaHora { get; set; }
+        public EstadoTurno Estado { get; set; }
+
+        public Turno(int id, Paciente paciente, Medico medico, DateTime fechaHora)
+        {
+            Id = id; // Este ID se reasigna en la clase Agenda
+            Paciente = paciente;
+            Medico = medico;
+            FechaHora = fechaHora;
+            Estado = EstadoTurno.Programado; // Estado inicial por defecto
+        }
+
+        public override string ToString()
+        {
+            // Se usa el formato 'dd/MM/yyyy HH:mm' para la fecha y hora
+            return $"Turno ID: {Id}, Paciente: {Paciente.Nombre} {Paciente.Apellido}, Médico: {Medico.Nombre} {Medico.Apellido} ({Medico.Especialidad}), Fecha/Hora: {FechaHora:dd/MM/yyyy HH:mm}, Estado: {Estado}";
+        }
+    }
+}
