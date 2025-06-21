@@ -1,0 +1,10 @@
+namespace TurnosClinica.Models
+{
+    public enum EstadoTurno
+    {
+        Programado,
+        Confirmado,
+        Atendido,
+        Cancelado
+    }
+}
