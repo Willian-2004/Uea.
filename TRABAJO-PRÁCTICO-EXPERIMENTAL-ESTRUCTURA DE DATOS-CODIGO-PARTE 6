@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para LINQ (Where, Find)
+using TurnosClinica.Models; 
+
+namespace TurnosClinica.Services
+{
+    public class Agenda
+    {
+        private List<Paciente> pacientes;
+        private List<Medico> medicos;
+        private List<Turno> turnos;
+        private int nextPacienteId = 1;
+        private int nextMedicoId = 1;
+        private int nextTurnoId = 1;
+
+        public Agenda()
+        {
+            pacientes = new List<Paciente>();
+            medicos = new List<Medico>();
+            turnos = new List<Turno>();
+        }
+
+        // --- Métodos para Pacientes ---
+        public void AgregarPaciente(Paciente paciente)
+        {
+            paciente.Id = nextPacienteId++; // Asigna un ID único
+            pacientes.Add(paciente);
+            Console.WriteLine($"Paciente '{paciente.Nombre} {paciente.Apellido}' agregado con ID: {paciente.Id}");
+        }
+
+        public Paciente BuscarPacientePorId(int id)
+        {
+            return pacientes.Find(p => p.Id == id);
+        }
+
+        public List<Paciente> ObtenerTodosLosPacientes()
+        {
+            return pacientes;
+        }
+
+        // --- Métodos para Médicos ---
+        public void AgregarMedico(Medico medico)
+        {
+            medico.Id = nextMedicoId++; // Asigna un ID único
+            medicos.Add(medico);
+            Console.WriteLine($"Médico '{medico.Nombre} {medico.Apellido}' agregado con ID: {medico.Id}");
+        }
+
+        public Medico BuscarMedicoPorId(int id)
+        {
+            return medicos.Find(m => m.Id == id);
+        }
+
+        public List<Medico> ObtenerTodosLosMedicos()
+        {
+            return medicos;
+        }
+
+        // --- Métodos para Turnos ---
+        public void AgendarTurno(Turno turno)
+        {
+            // Validar si el paciente y médico existen antes de agendar
+            Paciente pacienteExistente = BuscarPacientePorId(turno.Paciente.Id);
+            Medico medicoExistente = BuscarMedicoPorId(turno.Medico.Id);
+
+            if (pacienteExistente == null)
+            {
+                Console.WriteLine("Error: El paciente especificado no existe. Por favor, registre al paciente primero.");
+                return;
+            }
+            if (medicoExistente == null)
+            {
+                Console.WriteLine("Error: El médico especificado no existe. Por favor, registre al médico primero.");
+                return;
+            }
+
+            // Opcional: Validar si el médico tiene otro turno a la misma hora
+            if (turnos.Any(t => t.Medico.Id == medicoExistente.Id && t.FechaHora == turno.FechaHora && t.Estado != EstadoTurno.Cancelado))
+            {
+                Console.WriteLine("Error: El médico ya tiene un turno programado para la misma fecha y hora.");
+                return;
+            }
+
+            // Opcional: Validar si el paciente tiene otro turno a la misma hora
+            if (turnos.Any(t => t.Paciente.Id == pacienteExistente.Id && t.FechaHora == turno.FechaHora && t.Estado != EstadoTurno.Cancelado))
+            {
+                Console.WriteLine("Error: El paciente ya tiene un turno programado para la misma fecha y hora.");
+                return;
+            }
+
+            turno.Id = nextTurnoId++; // Asigna un ID único al turno
+            turno.Paciente = pacienteExistente; // Asegura que el objeto paciente referenciado sea el de la lista
+            turno.Medico = medicoExistente;     // Asegura que el objeto médico referenciado sea el de la lista
+            turnos.Add(turno);
+            Console.WriteLine($"Turno agendado con éxito. ID del turno: {turno.Id}");
+        }
+
+        public Turno BuscarTurnoPorId(int id)
+        {
+            return turnos.Find(t => t.Id == id);
+        }
+
+        public List<Turno> ObtenerTodosLosTurnos()
+        {
+            return turnos;
+        }
+
+        public List<Turno> ConsultarTurnosPorFecha(DateTime fecha)
+        {
+            return turnos.Where(t => t.FechaHora.Date == fecha.Date).ToList();
+        }
+
+        public List<Turno> ConsultarTurnosDePaciente(int pacienteId)
+        {
+            return turnos.Where(t => t.Paciente.Id == pacienteId).ToList();
+        }
+
+        public List<Turno> ConsultarTurnosDeMedico(int medicoId)
+        {
+            return turnos.Where(t => t.Medico.Id == medicoId).ToList();
+        }
+
+        public void ActualizarEstadoTurno(int turnoId, EstadoTurno nuevoEstado)
+        {
+            Turno turno = BuscarTurnoPorId(turnoId);
+            if (turno != null)
+            {
+                turno.Estado = nuevoEstado;
+                Console.WriteLine($"Estado del turno {turnoId} actualizado a {nuevoEstado}.");
+            }
+            else
+            {
+                Console.WriteLine("Turno no encontrado.");
+            }
+        }
+    }
+}
