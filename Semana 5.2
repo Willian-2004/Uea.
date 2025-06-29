@@ -1,0 +1,29 @@
+using System;
+using System.Collections.Generic;
+
+public class ProgramaAsignaturas
+{
+    public static void Main(string[] args)
+    {
+        // Crear una lista para almacenar las asignaturas
+        List<string> asignaturas = new List<string>();
+
+        // Añadir las asignaturas a la lista
+        asignaturas.Add("Matemáticas");
+        asignaturas.Add("Física");
+        asignaturas.Add("Química");
+        asignaturas.Add("Historia");
+        asignaturas.Add("Lengua");
+
+        Console.WriteLine("--- Mis Asignaturas ---");
+
+        // Recorrer la lista y mostrar el mensaje para cada asignatura
+        foreach (string asignatura in asignaturas)
+        {
+            Console.WriteLine($"Yo estudio {asignatura}");
+        }
+
+        Console.WriteLine("\nPresione cualquier tecla para salir.");
+        Console.ReadKey(); // Espera a que el usuario presione una tecla antes de cerrar la consola
+    }
+}
