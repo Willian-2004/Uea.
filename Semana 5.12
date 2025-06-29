@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+
+// Se reutiliza la clase Asignatura del Ejercicio 2
+public class Asignatura
+{
+    public string Nombre { get; set; }
+    public double Calificacion { get; set; }
+
+    public Asignatura(string nombre, double calificacion)
+    {
+        Nombre = nombre;
+        Calificacion = calificacion;
+    }
+
+    public void Mostrar()
+    {
+        Console.WriteLine($"- {Nombre}: {Calificacion}");
+    }
+}
+
+public class Ejercicio4
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Ejercicio 4: Filtrar Asignaturas Aprobadas ---");
+
+        List<Asignatura> asignaturas = new List<Asignatura>();
+
+        asignaturas.Add(new Asignatura("Matemáticas", 8.5));
+        asignaturas.Add(new Asignatura("Física", 7.0));
+        asignaturas.Add(new Asignatura("Química", 9.2));
+        asignaturas.Add(new Asignatura("Historia", 6.8));
+        asignaturas.Add(new Asignatura("Lengua", 7.5));
+        asignaturas.Add(new Asignatura("Educación Física", 5.0));
+
+        double calificacionMinimaAprobacion = 7.0;
+
+        Console.WriteLine($"\nAsignaturas con calificación mayor o igual a {calificacionMinimaAprobacion:F1}:");
+
+        foreach (Asignatura asignatura in asignaturas)
+        {
+            if (asignatura.Calificacion >= calificacionMinimaAprobacion)
+            {
+                asignatura.Mostrar();
+            }
+        }
+
+        Console.WriteLine("\nPresione cualquier tecla para continuar...");
+        Console.ReadKey();
+    }
+}
