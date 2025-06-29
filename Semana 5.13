@@ -1,0 +1,113 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Para el método RemoveAll y Contains
+
+// Se reutiliza la clase Asignatura del Ejercicio 2
+public class Asignatura
+{
+    public string Nombre { get; set; }
+    public double Calificacion { get; set; }
+
+    public Asignatura(string nombre, double calificacion)
+    {
+        Nombre = nombre;
+        Calificacion = calificacion;
+    }
+
+    public void Mostrar()
+    {
+        Console.WriteLine($"- {Nombre}: {Calificacion:F2}");
+    }
+}
+
+public class Ejercicio5
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Ejercicio 5: Gestión Interactiva de Asignaturas ---");
+
+        List<Asignatura> asignaturas = new List<Asignatura>();
+
+        // Añadir algunas asignaturas iniciales
+        asignaturas.Add(new Asignatura("Matemáticas", 8.5));
+        asignaturas.Add(new Asignatura("Física", 7.0));
+        asignaturas.Add(new Asignatura("Química", 9.2));
+
+        bool salir = false;
+        while (!salir)
+        {
+            Console.WriteLine("\n--- Menú ---");
+            Console.WriteLine("1. Ver todas las asignaturas");
+            Console.WriteLine("2. Añadir nueva asignatura");
+            Console.WriteLine("3. Eliminar asignatura por nombre");
+            Console.WriteLine("4. Salir");
+            Console.Write("Seleccione una opción: ");
+
+            string opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.WriteLine("\nAsignaturas actuales:");
+                    if (asignaturas.Any()) // Comprueba si la lista no está vacía
+                    {
+                        foreach (Asignatura asignatura in asignaturas)
+                        {
+                            asignatura.Mostrar();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No hay asignaturas en la lista.");
+                    }
+                    break;
+
+                case "2":
+                    Console.Write("Ingrese el nombre de la nueva asignatura: ");
+                    string nuevoNombre = Console.ReadLine();
+
+                    Console.Write("Ingrese la calificación de la nueva asignatura: ");
+                    if (double.TryParse(Console.ReadLine(), out double nuevaCalificacion))
+                    {
+                        asignaturas.Add(new Asignatura(nuevoNombre, nuevaCalificacion));
+                        Console.WriteLine($"Asignatura '{nuevoNombre}' añadida.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Calificación inválida. No se añadió la asignatura.");
+                    }
+                    break;
+
+                case "3":
+                    Console.Write("Ingrese el nombre de la asignatura a eliminar: ");
+                    string nombreEliminar = Console.ReadLine();
+
+                    // Count antes de la eliminación
+                    int countBefore = asignaturas.Count;
+                    // RemoveAll elimina todos los elementos que coinciden con la condición
+                    asignaturas.RemoveAll(a => a.Nombre.Equals(nombreEliminar, StringComparison.OrdinalIgnoreCase));
+                    // Comprueba si se eliminó algo comparando los conteos
+                    if (asignaturas.Count < countBefore)
+                    {
+                        Console.WriteLine($"Asignatura '{nombreEliminar}' eliminada.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Asignatura '{nombreEliminar}' no encontrada.");
+                    }
+                    break;
+
+                case "4":
+                    salir = true;
+                    Console.WriteLine("Saliendo del programa...");
+                    break;
+
+                default:
+                    Console.WriteLine("Opción no válida. Intente de nuevo.");
+                    break;
+            }
+            Console.WriteLine("\nPresione cualquier tecla para continuar...");
+            Console.ReadKey();
+        }
+    }
+}
