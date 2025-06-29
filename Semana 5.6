@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método .Any() y .ToList() si decides usarlo para filtrado
+
+public class AsignaturasARepetir
+{
+    public static void Main(string[] args)
+    {
+        // 1. Almacenar las asignaturas de un curso en una lista
+        List<string> asignaturasDelCurso = new List<string>
+        {
+            "Matemáticas",
+            "Física",
+            "Química",
+            "Historia",
+            "Lengua"
+        };
+
+        // Definir la nota mínima para aprobar
+        const double notaMinimaAprobacion = 7.0;
+
+        // Lista para almacenar las asignaturas que el usuario deberá repetir
+        List<string> asignaturasARepetir = new List<string>();
+
+        Console.WriteLine("--- Introduce tus notas para cada asignatura ---");
+        Console.WriteLine($"Para aprobar, necesitas una nota de {notaMinimaAprobacion:F1} o superior.");
+
+        // 2. Preguntar al usuario la nota que ha sacado en cada asignatura
+        foreach (string asignatura in asignaturasDelCurso)
+        {
+            double nota;
+            bool entradaValida = false;
+
+            // Bucle para asegurar que la nota introducida es válida
+            while (!entradaValida)
+            {
+                Console.Write($"¿Qué nota has sacado en {asignatura}? ");
+                string input = Console.ReadLine();
+
+                // Intentar convertir la entrada del usuario a un número (double)
+                if (double.TryParse(input, out nota))
+                {
+                    // Opcional: Validar que la nota esté en un rango razonable (ej. 0-10)
+                    if (nota >= 0 && nota <= 10)
+                    {
+                        // 3. Evaluar si la asignatura está aprobada o no
+                        if (nota < notaMinimaAprobacion)
+                        {
+                            asignaturasARepetir.Add(asignatura); // Si está suspendida, añadir a la lista de repetir
+                        }
+                        entradaValida = true; // Salir del bucle while para esta asignatura
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nota fuera de rango. Por favor, introduce una nota entre 0 y 10.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Entrada inválida. Por favor, introduce un número para la nota.");
+                }
+            }
+        }
+
+        Console.WriteLine("\n--- Resumen de asignaturas ---");
+
+        // 4. Mostrar por pantalla las asignaturas que el usuario tiene que repetir
+        if (asignaturasARepetir.Any()) // Comprueba si la lista de asignaturas a repetir no está vacía
+        {
+            Console.WriteLine("Tienes que repetir las siguientes asignaturas:");
+            foreach (string asignatura in asignaturasARepetir)
+            {
+                Console.WriteLine($"- {asignatura}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("¡Felicidades! Has aprobado todas las asignaturas.");
+        }
+
+        Console.WriteLine("\nPresione cualquier tecla para salir.");
+        Console.ReadKey(); // Espera a que el usuario presione una tecla antes de cerrar la consola
+    }
+}
