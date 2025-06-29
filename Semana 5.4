@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método .Sort() o .OrderBy()
+
+public class LoteriaPrimitiva
+{
+    public static void Main(string[] args)
+    {
+        // Definir la cantidad de números que se esperan para la lotería
+        const int cantidadNumerosLoteria = 6;
+        const int minNumero = 1;
+        const int maxNumero = 49;
+
+        // Crear una lista para almacenar los números ganadores
+        List<int> numerosGanadores = new List<int>();
+
+        Console.WriteLine("--- Números Ganadores de la Lotería Primitiva ---");
+        Console.WriteLine($"Por favor, introduce los {cantidadNumerosLoteria} números ganadores de la lotería.");
+        Console.WriteLine($"Cada número debe estar entre {minNumero} y {maxNumero}, y no deben repetirse.");
+
+        // Bucle para pedir cada número al usuario
+        for (int i = 0; i < cantidadNumerosLoteria; i++)
+        {
+            int numero;
+            bool entradaValida = false;
+
+            while (!entradaValida)
+            {
+                Console.Write($"Introduce el número {i + 1}: ");
+                string input = Console.ReadLine();
+
+                // Intentar convertir la entrada a un número entero
+                if (int.TryParse(input, out numero))
+                {
+                    // Validar que el número esté dentro del rango
+                    if (numero >= minNumero && numero <= maxNumero)
+                    {
+                        // Validar que el número no esté ya en la lista
+                        if (!numerosGanadores.Contains(numero))
+                        {
+                            numerosGanadores.Add(numero);
+                            entradaValida = true; // La entrada es válida, salir del bucle while
+                        }
+                        else
+                        {
+                            Console.WriteLine("¡Error! Este número ya ha sido introducido. Por favor, introduce un número diferente.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"¡Error! El número debe estar entre {minNumero} y {maxNumero}.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("¡Error! Entrada inválida. Por favor, introduce un número entero.");
+                }
+            }
+        }
+
+        // Ordenar la lista de números de menor a mayor
+        // Opción 1: Usar el método Sort() de la lista (modifica la lista original)
+        numerosGanadores.Sort();
+
+        // Opción 2: Usar LINQ OrderBy (crea una nueva secuencia ordenada, no modifica la original)
+        // var numerosOrdenados = numerosGanadores.OrderBy(n => n).ToList();
+
+        Console.WriteLine("\n--- Números Ganadores Ordenados ---");
+
+        // Mostrar los números ordenados
+        Console.Write("Los números ganadores son: ");
+        for (int i = 0; i < numerosGanadores.Count; i++)
+        {
+            Console.Write(numerosGanadores[i]);
+            if (i < numerosGanadores.Count - 1)
+            {
+                Console.Write(", ");
+            }
+        }
+        Console.WriteLine(); // Salto de línea al final
+
+        Console.WriteLine("\nPresione cualquier tecla para salir.");
+        Console.ReadKey();
+    }
+}
