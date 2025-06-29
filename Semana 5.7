@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método .ToList() si se usa en la inicialización compacta
+
+public class AbecedarioFiltrado
+{
+    public static void Main(string[] args)
+    {
+        // 1. Almacenar el abecedario en una lista
+        // Creamos una lista de caracteres ('char')
+        List<char> abecedario = new List<char>();
+        for (char c = 'a'; c <= 'z'; c++)
+        {
+            abecedario.Add(c);
+        }
+
+        Console.WriteLine("--- Abecedario Original ---");
+        Console.WriteLine(string.Join(", ", abecedario)); // Muestra el abecedario original
+
+        // 2. Eliminar de la lista las letras que ocupen posiciones múltiplos de 3.
+        // Importante: Cuando eliminas elementos de una lista mientras iteras,
+        // los índices cambian. Es mejor iterar al revés o crear una nueva lista.
+        // Opción 1: Iterar desde el final hacia el principio (recomendado para eliminación directa)
+        for (int i = abecedario.Count - 1; i >= 0; i--)
+        {
+            // Las posiciones se basan en el índice de la lista.
+            // Si el índice es un múltiplo de 3 (0, 3, 6, 9, etc.)
+            if (i % 3 == 0)
+            {
+                abecedario.RemoveAt(i); // Elimina el elemento en esa posición
+            }
+        }
+
+        // Opción 2 (alternativa, usando LINQ para filtrar y crear una nueva lista):
+        // List<char> abecedarioFiltrado = abecedario
+        //     .Where((letra, indice) => (indice % 3 != 0)) // Filtra los que NO son múltiplos de 3
+        //     .ToList();
+        // abecedario = abecedarioFiltrado; // Reemplaza la lista original con la filtrada
+
+        Console.WriteLine("\n--- Abecedario Resultante (sin letras en posiciones múltiplos de 3) ---");
+
+        // 3. Mostrar por pantalla la lista resultante
+        Console.WriteLine(string.Join(", ", abecedario)); // Muestra el abecedario modificado
+
+        Console.WriteLine("\nPresione cualquier tecla para salir.");
+        Console.ReadKey(); // Espera a que el usuario presione una tecla antes de cerrar la consola
+    }
+}
