@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Asignatura
+{
+    public string Nombre { get; set; }
+    public double Calificacion { get; set; }
+
+    public Asignatura(string nombre, double calificacion = 0.0)
+    {
+        Nombre = nombre;
+        Calificacion = calificacion;
+    }
+
+    public void Mostrar()
+    {
+        Console.WriteLine($"- {Nombre}: {Calificacion:F2}");
+    }
+}
+
+public class ProgramaPrincipal
+{
+    public static void Main(string[] args)
+    {
+        List<Asignatura> asignaturas = new List<Asignatura>
+        {
+            new Asignatura("Matemáticas", 8.5),
+            new Asignatura("Física", 7.0),
+            new Asignatura("Química", 9.2),
+            new Asignatura("Historia", 6.8),
+            new Asignatura("Lengua", 7.5),
+            new Asignatura("Educación Física", 5.0)
+        };
+
+        bool salir = false;
+        while (!salir)
+        {
+            Console.Clear();
+            Console.WriteLine("--- Gestión de Asignaturas ---");
+            Console.WriteLine("1. Mostrar todas las asignaturas (Ejercicio 1 y 2)");
+            Console.WriteLine("2. Calcular promedio de calificaciones (Ejercicio 3)");
+            Console.WriteLine("3. Filtrar asignaturas aprobadas (Ejercicio 4)");
+            Console.WriteLine("4. Gestión interactiva de asignaturas (Añadir/Eliminar) (Ejercicio 5)");
+            Console.WriteLine("5. Salir");
+            Console.Write("Seleccione una opción: ");
+
+            string opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.WriteLine("\nAsignaturas del curso:");
+                    if (asignaturas.Any())
+                        asignaturas.ForEach(a => a.Mostrar());
+                    else
+                        Console.WriteLine("No hay asignaturas en la lista.");
+                    break;
+
+                case "2":
+                    if (asignaturas.Any())
+                    {
+                        double promedio = asignaturas.Average(a => a.Calificacion);
+                        Console.WriteLine($"\nEl promedio de las calificaciones es: {promedio:F2}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No hay asignaturas para calcular el promedio.");
+                    }
+                    break;
+
+                case "3":
+                    double minimo = 7.0;
+                    var aprobadas = asignaturas.Where(a => a.Calificacion >= minimo).ToList();
+                    Console.WriteLine($"\nAsignaturas con calificación mayor o igual a {minimo:F1}:");
+                    if (aprobadas.Any())
+                        aprobadas.ForEach(a => a.Mostrar());
+                    else
+                        Console.WriteLine("No hay asignaturas aprobadas.");
+                    break;
+
+                case "4":
+                    bool subMenu = false;
+                    while (!subMenu)
+                    {
+                        Console.WriteLine("\n--- Menú de Gestión ---");
+                        Console.WriteLine("1. Ver todas las asignaturas");
+                        Console.WriteLine("2. Añadir nueva asignatura");
+                        Console.WriteLine("3. Eliminar asignatura por nombre");
+                        Console.WriteLine("4. Volver al menú principal");
+                        Console.Write("Seleccione una opción: ");
+                        string subOpcion = Console.ReadLine();
+
+                        switch (subOpcion)
+                        {
+                            case "1":
+                                if (asignaturas.Any())
+                                    asignaturas.ForEach(a => a.Mostrar());
+                                else
+                                    Console.WriteLine("No hay asignaturas en la lista.");
+                                break;
+
+                            case "2":
+                                Console.Write("Ingrese el nombre de la nueva asignatura: ");
+                                string nombre = Console.ReadLine();
+
+                                Console.Write("Ingrese la calificación: ");
+                                if (double.TryParse(Console.ReadLine(), out double calif))
+                                {
+                                    asignaturas.Add(new Asignatura(nombre, calif));
+                                    Console.WriteLine("Asignatura añadida correctamente.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Calificación inválida.");
+                                }
+                                break;
+
+                            case "3":
+                                Console.Write("Ingrese el nombre a eliminar: ");
+                                string eliminar = Console.ReadLine();
+                                int count = asignaturas.RemoveAll(a => a.Nombre.Equals(eliminar, StringComparison.OrdinalIgnoreCase));
+                                Console.WriteLine(count > 0 ? "Asignatura eliminada." : "No encontrada.");
+                                break;
+
+                            case "4":
+                                subMenu = true;
+                                break;
+
+                            default:
+                                Console.WriteLine("Opción no válida.");
+                                break;
+                        }
+                        Console.WriteLine("\nPresione una tecla para continuar...");
+                        Console.ReadKey();
+                    }
+                    break;
+
+                case "5":
+                    salir = true;
+                    Console.WriteLine("Saliendo del programa...");
+                    break;
+
+                default:
+                    Console.WriteLine("Opción no válida.");
+                    break;
+            }
+
+            if (!salir && opcion != "4")
+            {
+                Console.WriteLine("\nPresione una tecla para continuar...");
+                Console.ReadKey();
+            }
+        }
+    }
+} 
