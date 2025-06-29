@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+
+public class ProgramaNotasAsignaturas
+{
+    public static void Main(string[] args)
+    {
+        // 1. Almacenar las asignaturas en una lista
+        List<string> asignaturas = new List<string>
+        {
+            "Matemáticas",
+            "Física",
+            "Química",
+            "Historia",
+            "Lengua"
+        };
+
+        // 2. Crear un diccionario para almacenar las notas (clave: asignatura, valor: nota)
+        Dictionary<string, double> notasPorAsignatura = new Dictionary<string, double>();
+
+        Console.WriteLine("--- Introduce tus notas ---");
+
+        // 3. Preguntar al usuario la nota de cada asignatura
+        foreach (string asignatura in asignaturas)
+        {
+            double nota;
+            bool entradaValida = false;
+
+            // Bucle para asegurar que la entrada de la nota sea válida
+            while (!entradaValida)
+            {
+                Console.Write($"¿Qué nota has sacado en {asignatura}? ");
+                string input = Console.ReadLine();
+
+                // Intentar convertir la entrada del usuario a un número (double)
+                if (double.TryParse(input, out nota))
+                {
+                    // Opcional: Validar que la nota esté en un rango razonable (ej. 0-10)
+                    if (nota >= 0 && nota <= 10)
+                    {
+                        notasPorAsignatura.Add(asignatura, nota);
+                        entradaValida = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nota fuera de rango. Por favor, introduce una nota entre 0 y 10.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Entrada inválida. Por favor, introduce un número para la nota.");
+                }
+            }
+        }
+
+        Console.WriteLine("\n--- Tus calificaciones ---");
+
+        // 4. Mostrar las asignaturas y sus notas
+        foreach (string asignatura in asignaturas)
+        {
+            // Verificamos si la asignatura tiene una nota asociada (debería tenerla)
+            if (notasPorAsignatura.ContainsKey(asignatura))
+            {
+                double nota = notasPorAsignatura[asignatura];
+                Console.WriteLine($"En {asignatura} has sacado {nota:F2}"); // Formatear a 2 decimales
+            }
+        }
+
+        Console.WriteLine("\nPresione cualquier tecla para salir.");
+        Console.ReadKey(); // Espera a que el usuario presione una tecla antes de cerrar la consola
+    }
+}
