@@ -1,0 +1,52 @@
+using System;
+using System.Linq; // Necesario para el método Reverse() de LINQ
+
+public class PalindromoChecker
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Verificador de Palíndromos ---");
+
+        Console.Write("Por favor, introduce una palabra: ");
+        string palabraOriginal = Console.ReadLine();
+
+        // Eliminar espacios y convertir a minúsculas para una comparación insensible a mayúsculas y espacios
+        string palabraProcesada = palabraOriginal.Replace(" ", "").ToLower();
+
+        // Opción 1: Invertir la cadena y comparar
+        // Convertir la cadena procesada a un array de caracteres, invertirlo y luego crear una nueva cadena
+        char[] arrayCaracteres = palabraProcesada.ToCharArray();
+        Array.Reverse(arrayCaracteres); // Invierte el array en su lugar
+        string palabraInvertida = new string(arrayCaracteres);
+
+        // Opción 2: Comparar caracteres desde los extremos (más eficiente para palabras muy largas)
+        // bool esPalindromo = true;
+        // int longitud = palabraProcesada.Length;
+        // for (int i = 0; i < longitud / 2; i++)
+        // {
+        //     if (palabraProcesada[i] != palabraProcesada[longitud - 1 - i])
+        //     {
+        //         esPalindromo = false;
+        //         break; // Si encontramos una diferencia, no es un palíndromo
+        //     }
+        // }
+
+        Console.WriteLine($"\nPalabra original: \"{palabraOriginal}\"");
+        Console.WriteLine($"Palabra procesada (sin espacios, minúsculas): \"{palabraProcesada}\"");
+        Console.WriteLine($"Palabra invertida: \"{pal palabraInvertida}\"");
+
+
+        if (palabraProcesada == palabraInvertida) // Comparar la palabra procesada con su versión invertida
+        // if (esPalindromo) // Para la Opción 2
+        {
+            Console.WriteLine("\n¡Sí, es un palíndromo!");
+        }
+        else
+        {
+            Console.WriteLine("\nNo, no es un palíndromo.");
+        }
+
+        Console.WriteLine("\nPresiona cualquier tecla para salir.");
+        Console.ReadKey();
+    }
+}
