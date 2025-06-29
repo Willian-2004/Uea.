@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método Zip()
+
+public class ProductoEscalarVectores
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Cálculo del Producto Escalar ---");
+
+        // 1. Almacenar los vectores en dos listas
+        List<int> vector1 = new List<int> { 1, 2, 3 };
+        List<int> vector2 = new List<int> { -1, 0, 2 };
+
+        Console.WriteLine("Vector 1: (" + string.Join(", ", vector1) + ")");
+        Console.WriteLine("Vector 2: (" + string.Join(", ", vector2) + ")");
+
+        // Verificar que los vectores tengan la misma dimensión
+        if (vector1.Count != vector2.Count)
+        {
+            Console.WriteLine("\nError: Los vectores deben tener la misma dimensión para calcular el producto escalar.");
+        }
+        else
+        {
+            int productoEscalar = 0;
+
+            // 2. Calcular el producto escalar
+            // El producto escalar se calcula sumando el producto de los componentes correspondientes.
+            // Por ejemplo, para (a1, a2, a3) y (b1, b2, b3) es (a1*b1 + a2*b2 + a3*b3)
+
+            // Opción 1: Usando un bucle for
+            for (int i = 0; i < vector1.Count; i++)
+            {
+                productoEscalar += vector1[i] * vector2[i];
+            }
+
+            // Opción 2: Usando LINQ (más concisa)
+            // int productoEscalarLinq = vector1.Zip(vector2, (a, b) => a * b).Sum();
+            // productoEscalar = productoEscalarLinq; // Asignar el resultado LINQ si se usara esta opción
+
+            // 3. Mostrar por pantalla su producto escalar
+            Console.WriteLine($"\nEl producto escalar de los vectores es: {productoEscalar}");
+        }
+
+        Console.WriteLine("\nPresiona cualquier tecla para salir.");
+        Console.ReadKey();
+    }
+}
