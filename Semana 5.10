@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para los métodos Min() y Max()
+
+public class PreciosMinMax
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Precios: Menor y Mayor ---");
+
+        // 1. Almacenar los precios en una lista
+        List<int> precios = new List<int> { 50, 75, 46, 22, 80, 65, 8 };
+
+        Console.WriteLine("Precios almacenados:");
+        Console.WriteLine(string.Join(", ", precios));
+
+        // 2. Encontrar el menor y el mayor de los precios
+        // Usamos los métodos Min() y Max() de LINQ (Language Integrated Query)
+        // Son muy eficientes y directos para este tipo de operaciones.
+
+        if (precios.Any()) // Siempre es buena práctica verificar que la lista no esté vacía
+        {
+            int precioMenor = precios.Min();
+            int precioMayor = precios.Max();
+
+            // 3. Mostrar por pantalla el menor y el mayor de los precios
+            Console.WriteLine($"\nEl precio menor es: {precioMenor}");
+            Console.WriteLine($"El precio mayor es: {precioMayor}");
+        }
+        else
+        {
+            Console.WriteLine("\nLa lista de precios está vacía.");
+        }
+
+        Console.WriteLine("\nPresiona cualquier tecla para salir.");
+        Console.ReadKey();
+    }
+}
