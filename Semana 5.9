@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq; // Necesario para el método ToLower()
+
+public class ContarVocales
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Contador de Vocales ---");
+
+        Console.Write("Por favor, introduce una palabra: ");
+        string palabra = Console.ReadLine();
+
+        // Convertir la palabra a minúsculas para hacer la búsqueda insensible a mayúsculas/minúsculas
+        string palabraEnMinusculas = palabra.ToLower();
+
+        // Crear un diccionario para almacenar el conteo de cada vocal
+        Dictionary<char, int> conteoVocales = new Dictionary<char, int>()
+        {
+            {'a', 0},
+            {'e', 0},
+            {'i', 0},
+            {'o', 0},
+            {'u', 0}
+        };
+
+        // Recorrer cada carácter de la palabra
+        foreach (char caracter in palabraEnMinusculas)
+        {
+            // Verificar si el carácter es una vocal y actualizar su conteo
+            if (conteoVocales.ContainsKey(caracter))
+            {
+                conteoVocales[caracter]++;
+            }
+        }
+
+        Console.WriteLine("\n--- Conteo de Vocales ---");
+
+        // Mostrar el resultado por pantalla
+        foreach (var par in conteoVocales)
+        {
+            Console.WriteLine($"La vocal '{par.Key}' aparece {par.Value} vez(veces).");
+        }
+
+        Console.WriteLine("\nPresiona cualquier tecla para salir.");
+        Console.ReadKey();
+    }
+}
