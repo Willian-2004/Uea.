@@ -1,0 +1,27 @@
+def calcular_longitud_lista(lista):
+    """
+    Calcula el número de elementos en una lista recorriéndola.
+
+    Args:
+        lista: La lista de la cual se quiere calcular la longitud.
+
+    Returns:
+        El número de elementos en la lista.
+    """
+    contador = 0  # Inicializamos un contador para llevar el registro de los elementos
+    for _ in lista:  # Recorremos cada elemento de la lista
+        contador += 1  # Incrementamos el contador en cada "salto" o elemento
+    return contador  # Devolvemos el conteo final
+
+# --- Ejemplo de uso ---
+mi_lista = [10, 20, 30, 40, 50]
+longitud = calcular_longitud_lista(mi_lista)
+print(f"La longitud de la lista es: {longitud}")
+
+otra_lista = ['manzana', 'banana', 'cereza']
+longitud_otra = calcular_longitud_lista(otra_lista)
+print(f"La longitud de la otra lista es: {longitud_otra}")
+
+lista_vacia = []
+longitud_vacia = calcular_longitud_lista(lista_vacia)
+print(f"La longitud de una lista vacía es: {longitud_vacia}")
