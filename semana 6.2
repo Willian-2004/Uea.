@@ -1,0 +1,87 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class ListComparer
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("¡Bienvenido al comparador de listas de enteros!");
+
+        // Solicitar el número de elementos para las listas
+        int numElements;
+        while (true)
+        {
+            Console.Write("Por favor, ingresa la cantidad de elementos que tendrán ambas listas: ");
+            if (int.TryParse(Console.ReadLine(), out numElements) && numElements > 0)
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Entrada inválida. Por favor, ingresa un número entero positivo.");
+            }
+        }
+
+        // Crear las listas
+        List<int> lista1 = new List<int>();
+        List<int> lista2 = new List<int>();
+
+        // Ciclo de carga para la primera lista
+        Console.WriteLine("\n--- Carga de la Primera Lista ---");
+        CargarLista(lista1, numElements, "primera");
+
+        // Ciclo de carga para la segunda lista
+        Console.WriteLine("\n--- Carga de la Segunda Lista ---");
+        CargarLista(lista2, numElements, "segunda");
+
+        // Comparar las listas
+        Console.WriteLine("\n--- Realizando la Verificación ---");
+        CompararListas(lista1, lista2);
+
+        Console.WriteLine("\nPresiona cualquier tecla para salir...");
+        Console.ReadKey();
+    }
+
+    // Método para cargar una lista
+    public static void CargarLista(List<int> lista, int numElements, string nombreLista)
+    {
+        for (int i = 0; i < numElements; i++)
+        {
+            int valor;
+            while (true)
+            {
+                Console.Write($"Ingresa el valor entero para el elemento {i + 1} de la {nombreLista} lista: ");
+                if (int.TryParse(Console.ReadLine(), out valor))
+                {
+                    lista.Add(valor);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Entrada inválida. Por favor, ingresa un número entero.");
+                }
+            }
+        }
+    }
+
+    // Método para comparar las listas y mostrar el resultado
+    public static void CompararListas(List<int> lista1, List<int> lista2)
+    {
+        bool sonMismoTamano = lista1.Count == lista2.Count;
+        bool sonIgualesContenido = lista1.SequenceEqual(lista2); // Compara si los elementos son iguales y en el mismo orden
+
+        if (sonMismoTamano && sonIgualesContenido)
+        {
+            Console.WriteLine("a. Las listas son **iguales en tamaño y en contenido**.");
+        }
+        else if (sonMismoTamano && !sonIgualesContenido)
+        {
+            Console.WriteLine("b. Las listas son **iguales en tamaño pero no en contenido**.");
+        }
+        else
+        {
+            Console.WriteLine("c. Las listas **no tienen el mismo tamaño ni contenido**.");
+        }
+    }
+}
