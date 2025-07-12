@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+
+public class TowersOfHanoi
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("--- Resolución de las Torres de Hanói ---");
+        Console.Write("Ingrese el número de discos: ");
+        int numberOfDisks = int.Parse(Console.ReadLine());
+
+        // Llamada a la función recursiva para resolver el problema
+        // (número de discos, torre de origen, torre auxiliar, torre de destino)
+        SolveHanoi(numberOfDisks, 'A', 'B', 'C');
+        Console.WriteLine("\n¡Torres de Hanói resueltas!");
+    }
+
+    /// <summary>
+    /// Resuelve el problema de las Torres de Hanói de forma recursiva.
+    /// </summary>
+    /// <param name="n">Número de discos a mover.</param>
+    /// <param name="source">Torre de origen.</param>
+    /// <param name="auxiliary">Torre auxiliar.</param>
+    /// <param name="destination">Torre de destino.</param>
+    public static void SolveHanoi(int n, char source, char auxiliary, char destination)
+    {
+        // Caso base: Si solo hay un disco, simplemente muévelo de origen a destino.
+        if (n == 1)
+        {
+            Console.WriteLine($"Mover disco 1 de la torre {source} a la torre {destination}");
+            return;
+        }
+
+        // Paso 1: Mover n-1 discos de la torre de origen a la torre auxiliar.
+        // La torre de destino se convierte en la auxiliar para este subproblema.
+        SolveHanoi(n - 1, source, destination, auxiliary);
+
+        // Paso 2: Mover el disco más grande (n-ésimo) de la torre de origen a la torre de destino.
+        Console.WriteLine($"Mover disco {n} de la torre {source} a la torre {destination}");
+
+        // Paso 3: Mover los n-1 discos restantes de la torre auxiliar a la torre de destino.
+        // La torre de origen se convierte en la auxiliar para este subproblema.
+        SolveHanoi(n - 1, auxiliary, source, destination);
+    }
+}
