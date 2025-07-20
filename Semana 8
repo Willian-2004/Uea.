@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics; // Para medir el tiempo de ejecución
+
+// Clase para representar una página web
+public class PaginaWeb
+{
+    public string URL { get; private set; }
+    public string Titulo { get; private set; }
+
+    public PaginaWeb(string url, string titulo)
+    {
+        URL = url;
+        Titulo = titulo;
+    }
+
+    public void MostrarInfo()
+    {
+        Console.WriteLine($"Visitando: {Titulo} ({URL})");
+    }
+}
+
+// Clase para simular el navegador web y gestionar el historial
+public class NavegadorWeb
+{
+    // Pila para el historial hacia atrás (Last-In, First-Out)
+    private Stack<PaginaWeb> historialAtras;
+    // Pila para el historial hacia adelante (opcional, para futuras expansiones)
+    private Stack<PaginaWeb> historialAdelante;
+    public PaginaWeb PaginaActual { get; private set; }
+
+    public NavegadorWeb()
+    {
+        historialAtras = new Stack<PaginaWeb>();
+        historialAdelante = new Stack<PaginaWeb>();
+        PaginaActual = null; // Al inicio no hay página cargada
+    }
+
+    // Método para simular la visita a una nueva página
+    public void Visitar(PaginaWeb nuevaPagina)
+    {
+        if (PaginaActual != null)
+        {
+            // Si hay una página actual, la guardamos en el historial para retroceder
+            historialAtras.Push(PaginaActual);
+        }
+        PaginaActual = nuevaPagina; // La nueva página se convierte en la página actual
+        historialAdelante.Clear(); // Al visitar una nueva página, el historial de "adelante" se reinicia
+        Console.WriteLine("\n--- Nueva Visita ---");
+        PaginaActual.MostrarInfo();
+    }
+
+    // Método para simular el botón "retroceder"
+    public bool Retroceder()
+    {
+        if (historialAtras.Count > 0)
+        {
+            if (PaginaActual != null)
+            {
+                // Si hay una página actual, la movemos al historial de "adelante"
+                historialAdelante.Push(PaginaActual);
+            }
+            // Obtenemos la página anterior del historial y la establecemos como actual
+            PaginaActual = historialAtras.Pop();
+            Console.WriteLine("\n--- Retrocediendo ---");
+            PaginaActual.MostrarInfo();
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("\nNo hay más páginas para retroceder en el historial.");
+            return false;
+        }
+    }
+
+    // Método para mostrar el historial de páginas anteriores (reportería básica)
+    public void MostrarHistorialAtras()
+    {
+        Console.WriteLine("\n--- Historial de Páginas Anteriores ---");
+        if (historialAtras.Count == 0)
+        {
+            Console.WriteLine("Historial vacío.");
+            return;
+        }
+        foreach (var pagina in historialAtras)
+        {
+            Console.WriteLine($"- {pagina.Titulo} ({pagina.URL})");
+        }
+    }
+}
+
+// Clase principal para la ejecución del programa
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        // Medir el tiempo de ejecución
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        // Crear una instancia del navegador
+        NavegadorWeb miNavegador = new NavegadorWeb();
+
+        // Simular visitas a páginas
+        miNavegador.Visitar(new PaginaWeb("https://www.google.com", "Google"));
+        miNavegador.Visitar(new PaginaWeb("https://www.bing.com", "Bing"));
+        miNavegador.Visitar(new PaginaWeb("https://www.youtube.com", "YouTube"));
+        miNavegador.Visitar(new PaginaWeb("https://www.wikipedia.org", "Wikipedia"));
+        miNavegador.Visitar(new PaginaWeb("https://www.amazon.com", "Amazon"));
+
+        // Mostrar el historial de páginas antes de retroceder
+        miNavegador.MostrarHistorialAtras();
+
+        // Simular el uso del botón retroceder
+        Console.WriteLine("\n--- Probando el botón retroceder ---");
+        miNavegador.Retroceder(); // Vuelve a Wikipedia
+        miNavegador.Retroceder(); // Vuelve a YouTube
+        miNavegador.Retroceder(); // Vuelve a Bing
+        miNavegador.Retroceder(); // Vuelve a Google
+
+        // Intentar retroceder más allá del inicio del historial
+        miNavegador.Retroceder();
+        miNavegador.Retroceder(); // Demostrar que no hay más páginas
+
+        stopwatch.Stop();
+        Console.WriteLine($"\n--- Análisis de Rendimiento ---");
+        Console.WriteLine($"Tiempo de ejecución total de la simulación: {stopwatch.Elapsed.TotalMilliseconds} ms");
+
+        Console.WriteLine("\n--- Fin de la simulación ---");
+    }
+}
