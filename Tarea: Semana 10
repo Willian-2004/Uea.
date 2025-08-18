@@ -1,0 +1,126 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TareaVacunacion
+{
+    // Clase para representar a un ciudadano.
+    // Es crucial sobrescribir Equals y GetHashCode para que los conjuntos (HashSet)
+    // identifiquen correctamente a los objetos duplicados.
+    public class Ciudadano
+    {
+        public string Nombre { get; set; }
+
+        public Ciudadano(string nombre)
+        {
+            Nombre = nombre;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null || !(obj is Ciudadano))
+            {
+                return false;
+            }
+            return Nombre.Equals(((Ciudadano)obj).Nombre);
+        }
+
+        public override int GetHashCode()
+        {
+            return Nombre.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Nombre;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Requisito 1: Crear un conjunto ficticio de 500 ciudadanos.
+            var ciudadanosTotal = new HashSet<Ciudadano>();
+            for (int i = 1; i <= 500; i++)
+            {
+                ciudadanosTotal.Add(new Ciudadano($"Ciudadano_{i}"));
+            }
+            Console.WriteLine($"Total de ciudadanos ficticios generados: {ciudadanosTotal.Count}");
+            Console.WriteLine("------------------------------------------");
+
+            // Generar los subconjuntos para la vacunación.
+            // Para asegurar la lógica del problema (ambas dosis, solo Pfizer, etc.),
+            // seleccionamos ciudadanos del conjunto total.
+            var ciudadanosList = ciudadanosTotal.ToList();
+            var random = new Random();
+
+            // Requisito 2: Crear un conjunto ficticio de 75 ciudadanos vacunados con Pfizer.
+            var vacunadosPfizer = new HashSet<Ciudadano>();
+            while (vacunadosPfizer.Count < 75)
+            {
+                vacunadosPfizer.Add(ciudadanosList[random.Next(ciudadanosList.Count)]);
+            }
+
+            // Requisito 3: Crear un conjunto ficticio de 75 ciudadanos vacunados con AstraZeneca.
+            var vacunadosAstraZeneca = new HashSet<Ciudadano>();
+            while (vacunadosAstraZeneca.Count < 75)
+            {
+                vacunadosAstraZeneca.Add(ciudadanosList[random.Next(ciudadanosList.Count)]);
+            }
+            
+            // --- Aplicación de operaciones de teoría de conjuntos ---
+            
+            // 1. Ciudadanos que no se han vacunado.
+            // Operación: Diferencia de conjuntos. Total - (Pfizer ∪ AstraZeneca)
+            var todosVacunados = new HashSet<Ciudadano>(vacunadosPfizer);
+            todosVacunados.UnionWith(vacunadosAstraZeneca); // Operación de Unión
+
+            var noVacunados = new HashSet<Ciudadano>(ciudadanosTotal);
+            noVacunados.ExceptWith(todosVacunados); // Operación de Diferencia
+
+            Console.WriteLine($"\n1. Ciudadanos que no se han vacunado ({noVacunados.Count} personas):");
+            foreach (var ciudadano in noVacunados.Take(10)) // Mostrar solo los primeros 10 para no saturar la consola
+            {
+                Console.WriteLine($"- {ciudadano.Nombre}");
+            }
+            if (noVacunados.Count > 10) Console.WriteLine("(...y más)");
+
+            // 2. Ciudadanos que han recibido ambas dosis.
+            // Operación: Intersección de conjuntos. Pfizer ∩ AstraZeneca
+            var ambasDosis = new HashSet<Ciudadano>(vacunadosPfizer);
+            ambasDosis.IntersectWith(vacunadosAstraZeneca); // Operación de Intersección
+
+            Console.WriteLine($"\n2. Ciudadanos que han recibido ambas dosis ({ambasDosis.Count} personas):");
+            foreach (var ciudadano in ambasDosis.Take(10))
+            {
+                Console.WriteLine($"- {ciudadano.Nombre}");
+            }
+            if (ambasDosis.Count > 10) Console.WriteLine("(...y más)");
+
+            // 3. Ciudadanos que solo han recibido la vacuna de Pfizer.
+            // Operación: Diferencia de conjuntos. Pfizer - AstraZeneca
+            var soloPfizer = new HashSet<Ciudadano>(vacunadosPfizer);
+            soloPfizer.ExceptWith(vacunadosAstraZeneca); // Operación de Diferencia
+
+            Console.WriteLine($"\n3. Ciudadanos que solo han recibido la vacuna de Pfizer ({soloPfizer.Count} personas):");
+            foreach (var ciudadano in soloPfizer.Take(10))
+            {
+                Console.WriteLine($"- {ciudadano.Nombre}");
+            }
+            if (soloPfizer.Count > 10) Console.WriteLine("(...y más)");
+            
+            // 4. Ciudadanos que solo han recibido la vacuna de AstraZeneca.
+            // Operación: Diferencia de conjuntos. AstraZeneca - Pfizer
+            var soloAstrazeneca = new HashSet<Ciudadano>(vacunadosAstraZeneca);
+            soloAstrazeneca.ExceptWith(vacunadosPfizer); // Operación de Diferencia
+
+            Console.WriteLine($"\n4. Ciudadanos que solo han recibido la vacuna de AstraZeneca ({soloAstrazeneca.Count} personas):");
+            foreach (var ciudadano in soloAstrazeneca.Take(10))
+            {
+                Console.WriteLine($"- {ciudadano.Nombre}");
+            }
+            if (soloAstrazeneca.Count > 10) Console.WriteLine("(...y más)");
+        }
+    }
+}
