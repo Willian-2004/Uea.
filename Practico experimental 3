@@ -1,0 +1,155 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+// Clase para representar un libro
+public class Libro
+{
+    public string Isbn { get; set; }
+    public string Titulo { get; set; }
+    public string Autor { get; set; }
+    public int AnioPublicacion { get; set; }
+
+    public Libro(string isbn, string titulo, string autor, int anioPublicacion)
+    {
+        Isbn = isbn;
+        Titulo = titulo;
+        Autor = autor;
+        AnioPublicacion = anioPublicacion;
+    }
+}
+
+// Clase para gestionar la colección de libros usando un diccionario (mapa)
+public class Biblioteca
+{
+    private Dictionary<string, Libro> _libros;
+
+    public Biblioteca()
+    {
+        _libros = new Dictionary<string, Libro>();
+    }
+
+    public void AgregarLibro(Libro libro)
+    {
+        if (_libros.ContainsKey(libro.Isbn))
+        {
+            Console.WriteLine("Error: El libro con este ISBN ya existe.");
+        }
+        else
+        {
+            _libros.Add(libro.Isbn, libro);
+            Console.WriteLine("Libro agregado exitosamente.");
+        }
+    }
+
+    public Libro BuscarLibroPorIsbn(string isbn)
+    {
+        if (_libros.ContainsKey(isbn))
+        {
+            return _libros[isbn];
+        }
+        return null; // Retorna nulo si no se encuentra el libro
+    }
+
+    public void EliminarLibro(string isbn)
+    {
+        if (_libros.ContainsKey(isbn))
+        {
+            _libros.Remove(isbn);
+            Console.WriteLine("Libro eliminado exitosamente.");
+        }
+        else
+        {
+            Console.WriteLine("Error: El libro con este ISBN no se encontró.");
+        }
+    }
+
+    public void MostrarTodosLosLibros()
+    {
+        if (_libros.Count == 0)
+        {
+            Console.WriteLine("No hay libros registrados en la biblioteca.");
+            return;
+        }
+
+        Console.WriteLine("\n--- Lista de todos los libros ---");
+        foreach (var parClaveValor in _libros)
+        {
+            var libro = parClaveValor.Value;
+            Console.WriteLine($"ISBN: {libro.Isbn}, Título: {libro.Titulo}, Autor: {libro.Autor}, Año: {libro.AnioPublicacion}");
+        }
+        Console.WriteLine("---------------------------------\n");
+    }
+}
+
+// Clase principal que contiene la lógica del menú
+class Program
+{
+    static void Main(string[] args)
+    {
+        Biblioteca miBiblioteca = new Biblioteca();
+        string opcion;
+
+        do
+        {
+            Console.WriteLine("\n--- Menú de la Biblioteca ---");
+            Console.WriteLine("1. Agregar un nuevo libro");
+            Console.WriteLine("2. Buscar libro por ISBN");
+            Console.WriteLine("3. Eliminar libro por ISBN");
+            Console.WriteLine("4. Mostrar todos los libros");
+            Console.WriteLine("5. Salir");
+            Console.Write("Seleccione una opción: ");
+            opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.Write("ISBN: ");
+                    string isbn = Console.ReadLine();
+                    Console.Write("Título: ");
+                    string titulo = Console.ReadLine();
+                    Console.Write("Autor: ");
+                    string autor = Console.ReadLine();
+                    Console.Write("Año de Publicación: ");
+                    int anio;
+                    while (!int.TryParse(Console.ReadLine(), out anio))
+                    {
+                        Console.WriteLine("Por favor, ingrese un año válido.");
+                    }
+                    miBiblioteca.AgregarLibro(new Libro(isbn, titulo, autor, anio));
+                    break;
+                case "2":
+                    Console.Write("Ingrese el ISBN del libro a buscar: ");
+                    string buscarIsbn = Console.ReadLine();
+                    Libro libroEncontrado = miBiblioteca.BuscarLibroPorIsbn(buscarIsbn);
+                    if (libroEncontrado != null)
+                    {
+                        Console.WriteLine($"\nLibro encontrado:");
+                        Console.WriteLine($"Título: {libroEncontrado.Titulo}");
+                        Console.WriteLine($"Autor: {libroEncontrado.Autor}");
+                        Console.WriteLine($"Año: {libroEncontrado.AnioPublicacion}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Libro no encontrado.");
+                    }
+                    break;
+                case "3":
+                    Console.Write("Ingrese el ISBN del libro a eliminar: ");
+                    string eliminarIsbn = Console.ReadLine();
+                    miBiblioteca.EliminarLibro(eliminarIsbn);
+                    break;
+                case "4":
+                    miBiblioteca.MostrarTodosLosLibros();
+                    break;
+                case "5":
+                    Console.WriteLine("Saliendo de la aplicación...");
+                    break;
+                default:
+                    Console.WriteLine("Opción no válida. Por favor, intente de nuevo.");
+                    break;
+            }
+
+        } while (opcion != "5");
+    }
+}
