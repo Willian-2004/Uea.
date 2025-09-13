@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+
+public class CatalogoRevistas
+{
+    // Una lista para almacenar los títulos de las revistas.
+    private List<string> titulosRevistas;
+
+    public CatalogoRevistas()
+    {
+        titulosRevistas = new List<string>();
+        // Inicializamos el catálogo con al menos 10 títulos.
+        titulosRevistas.Add("National Geographic");
+        titulosRevistas.Add("Time Magazine");
+        titulosRevistas.Add("Scientific American");
+        titulosRevistas.Add("The Economist");
+        titulosRevistas.Add("Vogue");
+        titulosRevistas.Add("Wired");
+        titulosRevistas.Add("Forbes");
+        titulosRevistas.Add("Revista de Computación");
+        titulosRevistas.Add("Muy Interesante");
+        titulosRevistas.Add("Historia National Geographic");
+        titulosRevistas.Add("¡Hola!");
+    }
+
+    // Método que implementa la búsqueda iterativa de un título.
+    public bool BuscarTitulo(string tituloBuscado)
+    {
+        // Convertimos el título buscado a minúsculas para una comparación sin distinción entre mayúsculas y minúsculas.
+        string tituloBuscadoLower = tituloBuscado.ToLower();
+
+        // Iteramos sobre cada título en la lista.
+        foreach (string titulo in titulosRevistas)
+        {
+            // Convertimos el título del catálogo a minúsculas para la comparación.
+            if (titulo.ToLower() == tituloBuscadoLower)
+            {
+                return true; // Si el título es encontrado, retornamos verdadero.
+            }
+        }
+        return false; // Si el bucle termina y el título no fue encontrado, retornamos falso.
+    }
+
+    // Método para mostrar el menú interactivo.
+    public void MostrarMenu()
+    {
+        Console.WriteLine("--- Catálogo de Revistas ---");
+        Console.WriteLine("1. Buscar un título de revista");
+        Console.WriteLine("2. Salir");
+        Console.Write("Por favor, ingrese una opción: ");
+    }
+
+    public static void Main(string[] args)
+    {
+        CatalogoRevistas catalogo = new CatalogoRevistas();
+        string opcion;
+
+        do
+        {
+            catalogo.MostrarMenu();
+            opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    Console.Write("Ingrese el título de la revista que desea buscar: ");
+                    string tituloUsuario = Console.ReadLine();
+                    bool encontrado = catalogo.BuscarTitulo(tituloUsuario);
+
+                    if (encontrado)
+                    {
+                        Console.WriteLine("¡Encontrado!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No encontrado.");
+                    }
+                    break;
+                case "2":
+                    Console.WriteLine("Saliendo del programa. ¡Hasta luego!");
+                    break;
+                default:
+                    Console.WriteLine("Opción no válida. Por favor, intente de nuevo.");
+                    break;
+            }
+            Console.WriteLine(); // Agrega una línea en blanco para mayor claridad.
+        } while (opcion != "2");
+    }
+}
