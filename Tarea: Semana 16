@@ -1,0 +1,153 @@
+// ------------------------------------------------------------------
+// Clase principal para el Grafo (usando Lista de Adyacencia)
+// ------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class GrafoVuelos
+{
+    // Diccionario: Ciudad Origen -> Lista de Tuplas (Ciudad Destino, Costo)
+    private Dictionary<string, List<Tuple<string, int>>> adyacencias;
+
+    public GrafoVuelos()
+    {
+        adyacencias = new Dictionary<string, List<Tuple<string, int>>>();
+    }
+
+    public void AgregarVuelo(string origen, string destino, int costo)
+    {
+        if (!adyacencias.ContainsKey(origen))
+            adyacencias[origen] = new List<Tuple<string, int>>();
+        
+        adyacencias[origen].Add(new Tuple<string, int>(destino, costo));
+    }
+
+    // Algoritmo de Dijkstra para encontrar la ruta más barata
+    public (List<string> ruta, int costo) EncontrarRutaMasBarata(string origen, string destino)
+    {
+        var distancias = new Dictionary<string, int>();
+        var padres = new Dictionary<string, string>();
+        var noVisitados = new HashSet<string>();
+        
+        // Inicializar distancias y conjunto de no visitados
+        foreach (var ciudad in adyacencias.Keys.Union(adyacencias.Values.SelectMany(l => l.Select(t => t.Item1))))
+        {
+            distancias[ciudad] = int.MaxValue;
+            noVisitados.Add(ciudad);
+        }
+
+        distancias[origen] = 0;
+        
+        while (noVisitados.Count > 0)
+        {
+            // Simular Cola de Prioridad: encontrar el nodo no visitado con la distancia mínima
+            string actual = null;
+            int minCosto = int.MaxValue;
+            foreach (var ciudad in noVisitados)
+            {
+                if (distancias.ContainsKey(ciudad) && distancias[ciudad] < minCosto)
+                {
+                    minCosto = distancias[ciudad];
+                    actual = ciudad;
+                }
+            }
+
+            if (actual == null || actual == destino) break; // Termina si no hay más rutas o si llegamos al destino
+            
+            noVisitados.Remove(actual);
+
+            if (adyacencias.ContainsKey(actual))
+            {
+                foreach (var vecino in adyacencias[actual])
+                {
+                    string v = vecino.Item1;
+                    int peso = vecino.Item2;
+                    int nuevaDistancia = distancias[actual] + peso;
+
+                    if (nuevaDistancia < distancias.GetValueOrDefault(v, int.MaxValue))
+                    {
+                        distancias[v] = nuevaDistancia;
+                        padres[v] = actual;
+                    }
+                }
+            }
+        }
+        
+        // Reconstrucción de la ruta
+        if (!padres.ContainsKey(destino) && origen != destino) 
+            return (new List<string> { "Ruta no encontrada" }, -1);
+
+        var ruta = new List<string>();
+        string paso = destino;
+        while (padres.ContainsKey(paso))
+        {
+            ruta.Add(paso);
+            paso = padres[paso];
+        }
+        ruta.Add(origen);
+        ruta.Reverse();
+        
+        return (ruta, distancias[destino]);
+    }
+
+    // Método de reportería para visualizar la estructura cargada
+    public void ReportarEstructura()
+    {
+        Console.WriteLine("\n**-- REPORTE DE VUELOS CARGADOS (GRAFO DE ADYACENCIA) --**");
+        foreach (var origen in adyacencias.Keys)
+        {
+            Console.Write($"{origen} -> ");
+            var vuelos = adyacencias[origen].Select(v => $"{v.Item1} [Costo: ${v.Item2}]");
+            Console.WriteLine(string.Join(", ", vuelos));
+        }
+        Console.WriteLine("----------------------------------------------------------");
+    }
+}
+
+// ------------------------------------------------------------------
+// Implementación en el método Main()
+// ------------------------------------------------------------------
+public class Programa
+{
+    public static void Main(string[] args)
+    {
+        GrafoVuelos vuelos = new GrafoVuelos();
+
+        // Carga de la BD Ficticia (similar a la tabla en el Desarrollo)
+        vuelos.AgregarVuelo("A", "B", 200); // Lima -> Bogotá
+        vuelos.AgregarVuelo("A", "C", 150); // Lima -> Santiago
+        vuelos.AgregarVuelo("B", "D", 100); // Bogotá -> Miami
+        vuelos.AgregarVuelo("C", "E", 300); // Santiago -> Madrid
+        vuelos.AgregarVuelo("D", "F", 250); // Miami -> París
+        vuelos.AgregarVuelo("E", "G", 400); // Madrid -> Berlín
+        vuelos.AgregarVuelo("C", "F", 500); // Santiago -> París
+        vuelos.AgregarVuelo("D", "E", 120); // Miami -> Madrid
+        vuelos.AgregarVuelo("B", "G", 650); // Bogotá -> Berlín
+
+        // 1. Reportería: Visualizar la estructura
+        vuelos.ReportarEstructura();
+        
+        // 2. Consulta de la Solución (A a G)
+        string origen = "A"; // Lima
+        string destino = "G"; // Berlín
+
+        var resultado = vuelos.EncontrarRutaMasBarata(origen, destino);
+
+        Console.WriteLine($"\n**-- RESULTADO DE LA BÚSQUEDA DE VUELOS EFICIENTE --**");
+        if (resultado.costo != -1)
+        {
+            Console.WriteLine($"Ruta más barata de {origen} a {destino}:");
+            for (int i = 0; i < resultado.ruta.Count - 1; i++)
+            {
+                // Este código requeriría una búsqueda inversa de costo, pero para el reporte simple:
+                Console.WriteLine($"{i + 1}. {resultado.ruta[i]} -> {resultado.ruta[i + 1]}"); 
+            }
+            Console.WriteLine($"COSTO TOTAL MÍNIMO: ${resultado.costo}");
+        }
+        else
+        {
+            Console.WriteLine($"No se encontró una ruta de {origen} a {destino}.");
+        }
+    }
+}
